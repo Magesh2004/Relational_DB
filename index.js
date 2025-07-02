@@ -3,47 +3,22 @@ const app = express()
 
 const prisma = require('./config/db')
 const sendResponse = require('./utils/sendResponse')
-const e = require('express')
+
+const userRoute = require('./routes/user')
+const categoryRoute = require('./routes/category')
+const bookRoute = require('./routes/book')
 
 app.listen(8000,()=>{
     console.log("The server is running on port 8000.....");
 })
+
 app.use(express.json())
 
+app.use('/',userRoute)
+app.use('/',categoryRoute);
+app.use('/',bookRoute);
 
-
-app.get('/',async(req,res)=>{
-    try{
-        const user = await prisma.user.findMany();
-        const cart = await prisma.cart.findMany();
-        const book = await prisma.book.findMany();
-        const category = await prisma.category.findMany();
-        sendResponse(res,200,"Successfully fetched",{user,cart,book,category})
-    }catch(err){
-        sendResponse(res,500,"Somethinog is wrong",{err})
-    }
-})
-
-app.post('/',async(req,res)=>{
-    const {name} = req.body;
-    const newCategory = await prisma.category.create({
-        data:{
-            name : name
-        }
-    })
-    sendResponse(res,201,"succesfully created",newCategory)
-})
-app.get('/:catid',async(req,res)=>{
-    const {catid} = (req.params);
-    const id = parseInt(catid)
-    const category = await prisma.category.findUnique({
-        where:{id:id},
-        include:{
-            books:true
-        }
-    })
-    sendResponse(res,200,"Successfully fetched",{category})
-})
-app.post('/:catid',async(req,res)=>{
-    
+app.use((err,req,res,next)=>{
+    const {status = 500, message = "Something went wrong ."} = err;
+    sendResponse(res,status,message,err)
 })

@@ -16,16 +16,17 @@ model User {
 }
 
 model Cart {
-  id     Int        @id @default(autoincrement())
-  userId Int        @unique
-  user   User       @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id])
   books  Book[]
 }
-  model Book {
+
+model Book {
   id         Int            @id @default(autoincrement())
   title      String
-  cartId     Int
-  cart Cart @relation(fields: [cartId],references: [id])
+  cartId     Int?
+  cart       Cart?           @relation(fields: [cartId], references: [id])
   categories BookCategory[]
 }
 
@@ -44,4 +45,3 @@ model BookCategory {
 
   @@id([bookId, categoryId])
 }
-
