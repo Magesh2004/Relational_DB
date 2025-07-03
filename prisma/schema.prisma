@@ -9,10 +9,19 @@ datasource db {
 }
 
 model User {
-  id     Int    @id @default(autoincrement())
-  name   String
-  cart   Cart?
-  cartId Int?
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  password      String
+  cart          Cart?
+  cartId        Int?
+  refreshtokens RefreshToken[]
+}
+
+model RefreshToken {
+  id      Int    @id @default(autoincrement())
+  token   String @unique
+  userId Int
+  user    User   @relation(fields: [userId], references: [id])
 }
 
 model Cart {
@@ -26,7 +35,7 @@ model Book {
   id         Int            @id @default(autoincrement())
   title      String
   cartId     Int?
-  cart       Cart?           @relation(fields: [cartId], references: [id])
+  cart       Cart?          @relation(fields: [cartId], references: [id])
   categories BookCategory[]
 }
 

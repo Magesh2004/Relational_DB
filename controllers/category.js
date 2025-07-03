@@ -4,7 +4,7 @@ const sendResponse = require('../utils/sendResponse')
 
 module.exports.FetchAllCategory = async(req,res)=>{
     const category = await prisma.category.findMany();
-    sendResponse(res,200,"Successfully fetched",{category})
+    sendResponse(res,200,true,"Successfully fetched",{category})
 }
 
 module.exports.CreateNewCategory = async(req,res)=>{
@@ -14,7 +14,7 @@ module.exports.CreateNewCategory = async(req,res)=>{
             name:name
         }
     })
-    sendResponse(res,201,"Succesfully created")
+    sendResponse(res,201,true,"Succesfully created")
 }
 module.exports.FetchSpecificCategory = async(req,res)=>{
     const {catId} = req.params;
@@ -30,7 +30,7 @@ module.exports.FetchSpecificCategory = async(req,res)=>{
             }
         }
     })
-    sendResponse(res,200,"Successfully fetched",{category})
+    sendResponse(res,200,true,"Successfully fetched",{category})
 }
 module.exports.UpdateCategory = async(req,res)=>{
     const {catId} = req.params;
@@ -43,5 +43,5 @@ module.exports.UpdateCategory = async(req,res)=>{
             name:name
         }
     })
-    sendResponse(res,200,"Successfully updated",{category})
+    sendResponse(res,200,true,"Successfully updated",{category})
 }

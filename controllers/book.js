@@ -18,7 +18,7 @@ module.exports.CreateBook = async(req,res)=>{
             }
         }
     })
-    sendResponse(res,201,"Successfully created a book",{book})
+    sendResponse(res,201,true,"Successfully created a book",{book})
 
 }
 module.exports.FetchSpecificBook = async(req,res)=>{
@@ -36,9 +36,9 @@ module.exports.FetchSpecificBook = async(req,res)=>{
         }
     })
     if(!book){
-        sendResponse(res,200,"There is no book found")
+        sendResponse(res,200,false,"There is no book found")
     }else{
-        sendResponse(res,200,"Successfully fetched",{book})
+        sendResponse(res,200,true,"Successfully fetched",{book})
     }
 }
 module.exports.UpdateBook = async(req,res)=>{
@@ -52,7 +52,7 @@ module.exports.UpdateBook = async(req,res)=>{
             title:title
         }
     })
-    sendResponse(res,200,"Successfully Upadated",{book})
+    sendResponse(res,200,true,"Successfully Upadated",{book})
 
 }
 module.exports.AddToCart = async(req,res)=>{
@@ -68,7 +68,7 @@ module.exports.AddToCart = async(req,res)=>{
             }
         }
     })
-    sendResponse(res,200,"Added to cart")
+    sendResponse(res,200,true,"Added to cart")
 
 }
 // cart_ID = 2

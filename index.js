@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
 
-const prisma = require('./config/db')
-const sendResponse = require('./utils/sendResponse')
+require('dotenv').config()
+
+const errorHandler = require('./middleware/errorHandler')
 
 const userRoute = require('./routes/user')
 const categoryRoute = require('./routes/category')
@@ -18,7 +19,4 @@ app.use('/',userRoute)
 app.use('/',categoryRoute);
 app.use('/',bookRoute);
 
-app.use((err,req,res,next)=>{
-    const {status = 500, message = "Something went wrong ."} = err;
-    sendResponse(res,status,message,err)
-})
+app.use(errorHandler)
