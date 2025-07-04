@@ -45,8 +45,8 @@ module.exports.LoginUser = async(req,res)=>{
     if(!user || !(await bcrypt.compare(password,user.password))){
         throw new ExpressError(401,"Invalid password or user")
     }
-    const accessKey = jwt.generateAccessToken({id:user.id})
-    const refreshKey = jwt.generateRefreshToken({id:user.id})
+    const accessKey = jwt.generateAccessToken(user)
+    const refreshKey = jwt.generateRefreshToken(user)
     await prisma.refreshToken.create({
         data:{
             token:refreshKey,
@@ -79,6 +79,16 @@ module.exports.FetchNewAccessToken = async(req,res)=>{
     }catch(err){
         throw new ExpressError(400,"Invalid Token or Token Expired");
     }
-    const accessKey = jwt.generateAccessToken({id:user.id});
+    const accessKey = jwt.generateAccessToken(user);
     sendResponse(res,200,true,"New Token genereted",{accessKey})    
+}
+
+module.exports.FetchCart =async(req,res)=>{
+    const cartId  = req.user.cartId;
+    const cart = await prisma.cart.findUnique({
+        where:{
+            id:cartId
+        }
+    })
+    sendResponse(res,200,true,"Successfully fetched cart",{cart})
 }

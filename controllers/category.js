@@ -1,5 +1,6 @@
-const prisma = require('../config/db')
-
+//db
+const prisma = require('../config/db');
+//utils
 const sendResponse = require('../utils/sendResponse')
 
 module.exports.FetchAllCategory = async(req,res)=>{
@@ -44,4 +45,29 @@ module.exports.UpdateCategory = async(req,res)=>{
         }
     })
     sendResponse(res,200,true,"Successfully updated",{category})
+}
+
+module.exports.AddBookToCategory = async(req,res)=>{
+    const {catid,bookid} = req.params
+    const cId = parseInt(catid)
+    const bId = parseInt(bookid)
+    const book = await prisma.book.update({
+        where:{
+            id:bId
+        },
+        data:{
+            categories:{
+                create:[
+                    {
+                        category:{
+                            connect:{
+                                id:cId
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    })
+    sendResponse(res,200,true,"Successfully added to categoty",{book})
 }

@@ -9,7 +9,7 @@ This project is a basic **CRUD API** server that demonstrates 
 - **one-to-one**
 - **many-to-many**
 
-data modeling works using **PostgreSQL**, **Prisma ORM**, and **Express.js**. It showcases multiple relationship types
+data modeling works using **PostgreSQL**, **Prisma ORM**, and **Express.js**. It showcases multiple relationship types and authentication using the json web token
 
 ## 🧰 Tech Stack
 
@@ -18,6 +18,8 @@ data modeling works using **PostgreSQL**, **Prisma ORM**, and **Express.js**. It
 - **PostgreSQL**
 - **Prisma ORM**
 - **RESTful API**
+- **JWT**
+
 
 ---
 
@@ -29,13 +31,19 @@ data modeling works using **PostgreSQL**, **Prisma ORM**, and **Express.js**. It
 | --- | --- | --- |
 | GET | `/` | Fetch all Categories, User, and Cart |
 | POST | `/` | Create a new Category |
-| GET | `/:catid` | Fetch all books in a specific category |
-| PUT | `/:catid` | Update a category |
-| POST | `/:catid/book` | Create a new Book in a Category (attach via join) |
-| GET | `/:catid/book/:bookid` | Fetch the specific book and its categorys |
-| PUT | `/:catid/book/:bookid` | Will update a book |
-| GET | `/:catid/book/:bookid/true` | Add the book to cart |
-| GET | `/user` | Fetch the user and cart |
+| GET | `/cart` | Fetch  the cart |
+| POST | `auth/register` | Create a new user |
+| POST | `auth/login` | To login for a user |
+| POST | `auth/logout` | To logout a user |
+| POST | `auth/ref` | To generate a new accesscode |
+| GET | `/category/:catid` | Fetch all books in a specific category |
+| PUT | `/categoty/:catid` | Update a category |
+| POST | `/categoty/:catid/book` | Create a new Book in a Category (attach via join) |
+| GET | `/categoty/:catid/book/:bookid` | Add the book to the Category |
+| GET | `/book/:bookid` | Fetch the specific book and its categorys |
+| PUT | `/book/:bookid` | Will update a book |
+| GET | `/book/:bookid/cart/true` | Add the book to cart |
+| GET | `/book/:bookid/cart/false` | Add the book to cart |
 
 ---
 
