@@ -5,11 +5,13 @@ const sendResponse = require('../utils/sendResponse')
 
 module.exports.CreateBook = async(req,res)=>{
     const {catId} = req.params;
-    const {title} = req.body
+    const {title,inStock,price} = req.body
     const cId = parseInt(catId)
     const book = await prisma.book.create({
         data:{
             title:title,
+            inStock,
+            price,
             categories:{
                 create:{
                     category:{
@@ -45,31 +47,15 @@ module.exports.FetchSpecificBook = async(req,res)=>{
 module.exports.UpdateBook = async(req,res)=>{
     const{bookId} = req.params;
     const bId = parseInt(bookId)
-    const {title} = req.body;
+    const {title,inStock,price} = req.body;
     const book = await prisma.book.update({
         where:{
             id:bId
         },data:{
-            title:title
+            title:title,inStock,price
         }
     })
     sendResponse(res,200,true,"Successfully Upadated",{book})
 
 }
-module.exports.AddToCart = async(req,res)=>{
-    const cart_id = 2;
-    const {bookId} = req.params;
-    const id = parseInt(bookId);
-    const book = await prisma.book.update({
-        where:{
-            id:id
-        },data:{
-            cart:{
-               connect:{id:cart_id} 
-            }
-        }
-    })
-    sendResponse(res,200,true,"Added to cart")
 
-}
-// cart_ID = 2

@@ -11,10 +11,12 @@ datasource db {
 model User {
   id            Int            @id @default(autoincrement())
   name          String         @unique
+  email         String         @unique
   password      String
   cart          Cart?
   cartId        Int?
   refreshtokens RefreshToken[]
+  Order         Order[]
 }
 
 model RefreshToken {
@@ -25,18 +27,52 @@ model RefreshToken {
 }
 
 model Cart {
-  id     Int    @id @default(autoincrement())
-  userId Int    @unique
-  user   User   @relation(fields: [userId], references: [id])
-  books  Book[]
+  id     Int         @id @default(autoincrement())
+  userId Int         @unique
+  user   User        @relation(fields: [userId], references: [id])
+  items  CartItems[]
+  total  Int?
 }
 
 model Book {
   id         Int            @id @default(autoincrement())
   title      String
-  cartId     Int?
-  cart       Cart?          @relation(fields: [cartId], references: [id])
+  inStock    Int
+  price      Int
   categories BookCategory[]
+  CartItems  CartItems[]
+  OrderItems OrderItems[]
+}
+
+model CartItems {
+  cartId   Int
+  bookId   Int
+  cart     Cart @relation(fields: [cartId], references: [id])
+  book     Book @relation(fields: [bookId], references: [id])
+  price    Int
+  quantity Int
+
+  @@id([cartId, bookId])
+}
+
+model Order {
+  id            Int          @id @default(autoincrement())
+  userId        Int
+  user          User         @relation(fields: [userId], references: [id])
+  items         OrderItems[]
+  paymentStatus String
+  status        String
+}
+
+model OrderItems {
+  orderId  Int
+  bookId   Int
+  order    Order @relation(fields: [orderId], references: [id])
+  book     Book  @relation(fields: [bookId], references: [id])
+  price    Int
+  quantity Int
+
+  @@id([orderId, bookId])
 }
 
 model Category {

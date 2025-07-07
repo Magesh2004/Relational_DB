@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const category = require('../controllers/category')
 
 
-router.route('/')
+router.route('/category')
 .get(catchAsync(category.FetchAllCategory))
 .post(catchAsync(category.CreateNewCategory))
 

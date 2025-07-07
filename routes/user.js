@@ -5,7 +5,6 @@ const {authenticate} = require('../middleware/authenticate')
 const catchAsync = require('../utils/catchAsync')
 const user = require('../controllers/user')
 
-router.get('/cart',authenticate,catchAsync(user.FetchCart))
 router.post('/auth/register',catchAsync(user.RegisterNewUser))
 router.post('/auth/login',catchAsync(user.LoginUser))
 router.post('/auth/logout',catchAsync(user.LogoutUser))

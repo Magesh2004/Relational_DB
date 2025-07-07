@@ -5,7 +5,9 @@ const { authenticate } = require('../middleware/authenticate');
 const catchAsync = require('../utils/catchAsync')
 const cart = require('../controllers/cart')
 
-router.post('/book/:bookid/cart/true',authenticate,catchAsync(cart.AddToCart))
-router.post('/book/:bookid/cart/false',authenticate,catchAsync(cart.RemoveFromCart))
+router.get('/cart',authenticate,catchAsync(cart.FetchCart))
+router.route('/cart/:bookId')
+.post(authenticate,catchAsync(cart.AddToCart))
+.delete(authenticate,catchAsync(cart.RemoveFromCart))
 
 module.exports = router;

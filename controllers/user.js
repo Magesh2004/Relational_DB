@@ -6,19 +6,20 @@ const jwt = require('../config/jwt')
 const sendResponse = require('../utils/sendResponse')
 
 module.exports.RegisterNewUser = async(req,res)=>{
-    const {name,password} = req.body;
+    const {name,password,email} = req.body;
     const existingUser = await prisma.user.findUnique({
         where:{
             name
         }
     })
     if(existingUser){
-        throw new ExpressError(409,"User already exist")
+        throw new ExpressError(409,"User or email already exist")
     }
     const hashPassword =await bcrypt.hash(password,5);
     const user = await prisma.user.create({
         data:{
             name,
+            email,
             password:hashPassword
         }
     })
@@ -79,16 +80,8 @@ module.exports.FetchNewAccessToken = async(req,res)=>{
     }catch(err){
         throw new ExpressError(400,"Invalid Token or Token Expired");
     }
-    const accessKey = jwt.generateAccessToken(user);
+    const { exp, iat, ...userPayload } = user;
+    const accessKey = jwt.generateAccessToken(userPayload);
     sendResponse(res,200,true,"New Token genereted",{accessKey})    
 }
 
-module.exports.FetchCart =async(req,res)=>{
-    const cartId  = req.user.cartId;
-    const cart = await prisma.cart.findUnique({
-        where:{
-            id:cartId
-        }
-    })
-    sendResponse(res,200,true,"Successfully fetched cart",{cart})
-}

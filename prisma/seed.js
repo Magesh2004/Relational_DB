@@ -2,66 +2,78 @@ const prisma = require('../config/db')
 
 
 async function main() {
-  const categories = ['Fiction', 'Science', 'History', 'Technology', 'Fantasy'];
+  // 🏷️ Create categories
+  const categories = await prisma.category.createMany({
+    data: [
+      { name: 'Fiction' },
+      { name: 'Non-Fiction' },
+      { name: 'Science' },
+      { name: 'Technology' },
+      { name: 'History' }
+    ],
+    skipDuplicates: true, // Avoids duplicate seed runs
+  });
 
-  // Upsert categories (avoid duplicate name errors)
-  for (const name of categories) {
-    await prisma.category.upsert({
-      where: { name },
-      update: {},
-      create: { name },
+  // 📚 Create books
+  const booksData = [
+    {
+      title: 'The Time Machine',
+      price: 299,
+      inStock: 10,
+      categories: ['Fiction', 'Science']
+    },
+    {
+      title: 'Sapiens',
+      price: 499,
+      inStock: 15,
+      categories: ['Non-Fiction', 'History']
+    },
+    {
+      title: 'Clean Code',
+      price: 599,
+      inStock: 20,
+      categories: ['Technology']
+    },
+    {
+      title: 'Brief Answers to the Big Questions',
+      price: 399,
+      inStock: 8,
+      categories: ['Science', 'Non-Fiction']
+    }
+  ];
+
+  for (const book of booksData) {
+    const createdBook = await prisma.book.create({
+      data: {
+        title: book.title,
+        price: book.price,
+        inStock: book.inStock,
+      }
     });
+
+    // Link categories
+    for (const categoryName of book.categories) {
+      const category = await prisma.category.findUnique({
+        where: { name: categoryName },
+      });
+
+      if (category) {
+        await prisma.bookCategory.create({
+          data: {
+            bookId: createdBook.id,
+            categoryId: category.id,
+          },
+        });
+      }
+    }
   }
 
-  // Fetch all categories with IDs
-  const allCategories = await prisma.category.findMany();
-  const getCategoryId = (name) => allCategories.find(cat => cat.name === name)?.id;
-
-  // Seed books
-  const book1 = await prisma.book.create({
-    data: {
-      title: "The Martian",
-      categories: {
-        create: [
-          { category: { connect: { id: getCategoryId("Science") } } },
-          { category: { connect: { id: getCategoryId("Fiction") } } },
-        ]
-      }
-    }
-  });
-
-  const book2 = await prisma.book.create({
-    data: {
-      title: "Harry Potter and the Sorcerer's Stone",
-      categories: {
-        create: [
-          { category: { connect: { id: getCategoryId("Fantasy") } } },
-        ]
-      }
-    }
-  });
-
-  const book3 = await prisma.book.create({
-    data: {
-      title: "Sapiens",
-      categories: {
-        create: [
-          { category: { connect: { id: getCategoryId("History") } } },
-          { category: { connect: { id: getCategoryId("Science") } } },
-        ]
-      }
-    }
-  });
-
-  console.log("✅ Seeding complete!");
-  console.log({ categories: allCategories, book1, book2, book3 });
+  console.log('📚 Seed data created successfully!');
 }
 
 main()
-  .catch(e => {
-    console.error(e);
+  .catch((e) => {
+    console.error('❌ Seed error:', e);
     process.exit(1);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .finally(() => prisma.$disconnect());
