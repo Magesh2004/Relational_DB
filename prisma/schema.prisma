@@ -12,6 +12,7 @@ model User {
   id            Int            @id @default(autoincrement())
   name          String         @unique
   email         String         @unique
+  // role          Role           @default(USER)
   password      String
   cart          Cart?
   cartId        Int?
@@ -56,12 +57,12 @@ model CartItems {
 }
 
 model Order {
-  id            Int          @id @default(autoincrement())
+  id            Int             @id @default(autoincrement())
   userId        Int
-  user          User         @relation(fields: [userId], references: [id])
+  user          User            @relation(fields: [userId], references: [id])
   items         OrderItems[]
-  paymentStatus String
-  status        String
+  paymentStatus PaymentStatuses @default(UNPAID)
+  status        OrderStatus     @default(PENDING)
 }
 
 model OrderItems {
@@ -90,3 +91,21 @@ model BookCategory {
 
   @@id([bookId, categoryId])
 }
+
+enum PaymentStatuses {
+  PAID
+  UNPAID
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  ORDERED
+  DELEVERD
+  CANCELED
+}
+
+// enum Role {
+//   USER
+//   ADMIN
+// }

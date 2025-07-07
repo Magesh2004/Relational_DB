@@ -9,6 +9,8 @@ router.route('/order')
 .get(authenticate,catchAsync(order.FetchAllOrder))
 .post(authenticate,catchAsync(order.PlaceOrder))
 
+router.get('/order/:orderId',authenticate,catchAsync(order.FetchOrder))
+
 router.put('/order/:orderId/pay',authenticate,catchAsync(order.MakePayment))
 
 router.put('/order/:orderId/status',authenticate,catchAsync(order.UpadateStatus))

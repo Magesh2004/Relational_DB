@@ -1,4 +1,5 @@
 const prisma = require("../config/db");
+const { PaymentStatuses, OrderStatus } = require("../generated/prisma");
 const sendResponse = require("../utils/sendResponse");
 
 module.exports.PlaceOrder = async(req,res)=>{
@@ -11,8 +12,8 @@ module.exports.PlaceOrder = async(req,res)=>{
     const order = await prisma.order.create({
         data:{
            userId:req.user.id,
-           paymentStatus:"Un paid",
-           status:"Pending"
+           paymentStatus:PaymentStatuses.UNPAID,
+           status:OrderStatus.PENDING
         }
     })
     const orderItemsData = cart.map(item=>({
@@ -45,11 +46,7 @@ module.exports.FetchAllOrder = async(req,res)=>{
         where:{
             userId
         },include:{
-            items:{
-                include:{
-                    book:true
-                }
-            }
+            items:true
         }
     })
     sendResponse(res,200,true,"Successfully Fetched", {order})
@@ -64,8 +61,8 @@ module.exports.MakePayment = async(req,res)=>{
             id:oId
         },
         data:{
-            paymentStatus:"Paid",
-            status:"Ordered"
+            paymentStatus:PaymentStatuses.PAID,
+            status:OrderStatus.ORDERED
         }
     })
     sendResponse(res,200,true,"Payment made Successfully",{order})
@@ -79,7 +76,7 @@ module.exports.UpadateStatus = async(req,res)=>{
         where:{
             id:oId
         },data:{
-            status:"Deleverd"
+            status:OrderStatus.DELEVERD
         }
     })
     sendResponse(res,200,true,"Status Successfully",{order})
@@ -93,9 +90,27 @@ module.exports.CancelOrder = async(req,res)=>{
         where:{
             id:oId
         },data:{
-            paymentStatus:"Refunded",
-            status:"Canceled"
+            paymentStatus:PaymentStatuses.REFUNDED,
+            status:OrderStatus.CANCELED
         }
     })
     sendResponse(res,200,true,"Status Successfully",{order})
 }
+
+module.exports.FetchOrder = async(req,res)=>{
+    const {orderId} = req.params;
+    const oId = parseInt(orderId)
+    const order = await prisma.order.findFirst({
+        where:{
+            id:oId
+        },include:{
+            items:{
+                include:{
+                    book:true
+                }
+            }
+        }
+    })
+    sendResponse(res,200,true,"Status Successfully",{order})
+}
+
