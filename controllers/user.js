@@ -6,7 +6,7 @@ const jwt = require('../config/jwt')
 const sendResponse = require('../utils/sendResponse')
 
 module.exports.RegisterNewUser = async(req,res)=>{
-    const {name,password,email} = req.body;
+    const {name,password,email,role} = req.body;
     const existingUser = await prisma.user.findUnique({
         where:{
             name
@@ -20,7 +20,8 @@ module.exports.RegisterNewUser = async(req,res)=>{
         data:{
             name,
             email,
-            password:hashPassword
+            password:hashPassword,
+            role
         }
     })
     const cart = await prisma.cart.create({

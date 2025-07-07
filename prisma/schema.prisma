@@ -12,7 +12,7 @@ model User {
   id            Int            @id @default(autoincrement())
   name          String         @unique
   email         String         @unique
-  // role          Role           @default(USER)
+  role          Role           @default(USER)
   password      String
   cart          Cart?
   cartId        Int?
@@ -105,7 +105,7 @@ enum OrderStatus {
   CANCELED
 }
 
-// enum Role {
-//   USER
-//   ADMIN
-// }
+enum Role {
+  USER
+  ADMIN
+}
