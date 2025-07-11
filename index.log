@@ -1,0 +1,18 @@
+{
+  method: 'PUT',
+  stack: 'ReferenceError: c is not defined\n' +
+    '    at module.exports.UpdateCategory (D:\\Wprojects\\Backend\\Relational_DB\\controllers\\category.js:44:16)\n' +
+    '    at D:\\Wprojects\\Backend\\Relational_DB\\utils\\catchAsync.js:3:9\n' +
+    '    at Layer.handleRequest (D:\\Wprojects\\Backend\\Relational_DB\\node_modules\\router\\lib\\layer.js:152:17)\n' +
+    '    at next (D:\\Wprojects\\Backend\\Relational_DB\\node_modules\\router\\lib\\route.js:157:13)\n' +
+    '    at module.exports.isAdmin (D:\\Wprojects\\Backend\\Relational_DB\\middleware\\isAdmin.js:11:9)\n' +
+    '    at Layer.handleRequest (D:\\Wprojects\\Backend\\Relational_DB\\node_modules\\router\\lib\\layer.js:152:17)\n' +
+    '    at next (D:\\Wprojects\\Backend\\Relational_DB\\node_modules\\router\\lib\\route.js:157:13)\n' +
+    '    at module.exports.validateUpCategory (D:\\Wprojects\\Backend\\Relational_DB\\middleware\\validate.js:37:9)\n' +
+    '    at Layer.handleRequest (D:\\Wprojects\\Backend\\Relational_DB\\node_modules\\router\\lib\\layer.js:152:17)\n' +
+    '    at next (D:\\Wprojects\\Backend\\Relational_DB\\node_modules\\router\\lib\\route.js:157:13)',
+  path: '/category/6',
+  level: 'error',
+  message: 'c is not defined',
+  timestamp: '2025-07-11T09:44:17.499Z'
+}

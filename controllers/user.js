@@ -13,7 +13,15 @@ module.exports.RegisterNewUser = async(req,res)=>{
         }
     })
     if(existingUser){
-        throw new ExpressError(409,"User or email already exist")
+        throw new ExpressError(409,"User already exist")
+    }
+    const existingEmail = await prisma.user.findUnique({
+        where:{
+            email
+        }
+    })
+    if(existingEmail){
+        throw new ExpressError(409,"Email already exist")
     }
     const hashPassword =await bcrypt.hash(password,5);
     const user = await prisma.user.create({

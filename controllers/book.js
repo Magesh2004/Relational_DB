@@ -1,5 +1,6 @@
 //db
-const prisma = require('../config/db')
+const prisma = require('../config/db');
+const ExpressError = require('../utils/ExpressError');
 //utils
 const sendResponse = require('../utils/sendResponse')
 
@@ -39,7 +40,7 @@ module.exports.FetchSpecificBook = async(req,res)=>{
         }
     })
     if(!book){
-        sendResponse(res,200,false,"There is no book found")
+        throw new ExpressError(400,"Book dosen't exist")
     }else{
         sendResponse(res,200,true,"Successfully fetched",{book})
     }
@@ -48,14 +49,22 @@ module.exports.UpdateBook = async(req,res)=>{
     const{bookId} = req.params;
     const bId = parseInt(bookId)
     const {title,inStock,price} = req.body;
+    const data ={}
+    if(title)data.title = title
+    if(inStock)data.inStock = inStock
+    if(price)data.price = price
+
+    const existingBook = await prisma.book.findUnique({
+        where:{
+            id:bId
+        }
+    })
+    if(!existingBook)throw new ExpressError(400,"Book doesn't exist")
     const book = await prisma.book.update({
         where:{
             id:bId
-        },data:{
-            title:title,inStock,price
-        }
+        },data
     })
     sendResponse(res,200,true,"Successfully Upadated",{book})
-
 }
 
