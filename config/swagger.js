@@ -10,17 +10,17 @@ const options = {
       description: 'API documentation for Bookstore Project',
     },
     servers: [{ url: 'http://localhost:8000/api' }],
-  },
-  apis: ['./routes/*.js'], 
   components: {
-  securitySchemes: {
-    bearerAuth: {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
     },
   },
 },
+  apis: ['./routes/*.js'] 
 };
 
 module.exports = swaggerJSDoc(options);

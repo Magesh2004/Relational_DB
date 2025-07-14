@@ -57,9 +57,9 @@ module.exports.UpdateCategory = async(req,res)=>{
 
 
 module.exports.AddBookToCategory = async (req, res) => {
-    const { catid, bookid } = req.params;
-    const cId = parseInt(catid);
-    const bId = parseInt(bookid);
+    const { catId, bookId } = req.params;
+    const cId = parseInt(catId);
+    const bId = parseInt(bookId);
     const book = await prisma.book.findUnique({
         where:{
             id:bId
