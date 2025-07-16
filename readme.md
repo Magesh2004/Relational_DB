@@ -1,8 +1,8 @@
-# **📌 Relational_DB API**
+# **📌 Book store API**
 
 ## **📖 What it does**
 
-This project is a basic **CRUD API** server that demonstrates
+This project is of an ecommerce to api where you can add update cart and place the order and cancle and view status
 
 - **one-to-many**
 - **many-to-one**
@@ -19,7 +19,8 @@ data modeling works using **PostgreSQL**, **Prisma ORM**, and **Express.js**. It
 - **Prisma ORM**
 - **RESTful API**
 - **JWT**
-
+- **Swagger**
+- **Loggers**
 ---
 
 ---
